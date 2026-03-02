@@ -63,15 +63,15 @@ jobs:
           BASE_URL="https://r2.kunobi.ninja/v${VERSION}"
           VERSIONED_FILE="Kunobi_${VERSION}_release_assets.json"
 
-          curl -fSL "${BASE_URL}/${VERSIONED_FILE}" -o release_assets.json
-          curl -fSL "${BASE_URL}/${VERSIONED_FILE}.sha256" -o release_assets.json.sha256
+          curl -fSL "${BASE_URL}/${VERSIONED_FILE}" -o releases/assets.json
+          curl -fSL "${BASE_URL}/${VERSIONED_FILE}.sha256" -o releases/assets.json.sha256
 
-          ls -lh release_assets.json release_assets.json.sha256
+          ls -lh releases/assets.json releases/assets.json.sha256
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet release_assets.json 2>/dev/null; then
+          if git diff --quiet releases/assets.json 2>/dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "ℹ️ Release assets already up to date, skipping"
           else
@@ -89,7 +89,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add release_assets.json release_assets.json.sha256
+          git add releases/assets.json releases/assets.json.sha256
           git commit -m "[Bot] Update Kunobi to ${VERSION}"
           git push origin "$BRANCH" || git push --force origin "$BRANCH"
           echo "name=$BRANCH" >> $GITHUB_OUTPUT
@@ -148,6 +148,6 @@ jobs:
           - **Version**: ${VERSION}
           - **Channel**: ${CHANNEL}
           - **Release assets**: ✅ SHA256 Verified
-          - **Assets**: ✅ Download and SHA256 Verified 
+          - **Assets**: ✅ Download and SHA256 Verified
           EOF
           )"
