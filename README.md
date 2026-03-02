@@ -1,95 +1,126 @@
-# kunobi-releases
+# Kunobi
 
-Public release metadata for [Kunobi](https://kunobi.ninja). This repo enables version discovery by repo tags, for [aqua-registry](https://github.com/aquaproj/aqua-registry) while keeping the source repository private. Also maintains kunobi releases metadata in json, for all kunobi released packages.
+Native desktop tool for Kubernetes and GitOps. Built on Tauri, not Electron.
 
-## Install Kunobi
+<p align="center">
+  <img width="800" alt="Kunobi - Home" src="screenshots/main.webp" />
+</p>
 
-### Using aqua
+## What it does
 
-Kunobi is registered in the [aqua-registry](https://github.com/aquaproj/aqua-registry/tree/main/pkgs/kunobi-ninja/kunobi-releases) as `kunobi-ninja/kunobi-releases` , so it can be installed using [aqua](https://aquaproj.github.io/)
+Kunobi is a desktop app for managing Kubernetes clusters. It reads your kubeconfig, connects to your clusters, and gives you a GUI for the stuff you'd normally do with kubectl or k9s.
+
+Multi-cluster management with keyboard shortcuts. A resource browser with virtual scrolling for large clusters. Split-pane terminals with auto-reconnect. A YAML editor with K8s-aware validation. Flux CD flow graph visualization. Built-in KIND cluster creation for testing locally without touching your real infrastructure.
+
+The whole thing runs natively on your OS. No bundled Chromium, no Electron, no Node.js runtime. Install size is around 30MB, idles at ~100MB of RAM.
+
+## Screenshots
+
+<p align="center">
+  <img width="800" alt="Kunobi - Pod browser" src="screenshots/pods.webp" />
+</p>
+
+<p align="center">
+  <img width="800" alt="Kunobi - Node browser with terminal" src="screenshots/nodes.webp" />
+</p>
+
+<p align="center">
+  <img width="800" alt="Kunobi - MCP server settings" src="screenshots/mcp.webp" />
+</p>
+
+## Install
+
+### Download
+
+Download from [kunobi.ninja/download](https://kunobi.ninja/download). Available for macOS, Linux, and Windows.
+
+### Homebrew (macOS)
 
 ```bash
-aqua init  # if not already initialized
-aqua g -i kunobi-ninja/kunobi-releases
+brew tap kunobi-ninja/kunobi  # If not already added
+brew install --cask kunobi
+```
+
+The cask is maintained at [kunobi-ninja/homebrew-kunobi](https://github.com/kunobi-ninja/homebrew-kunobi).
+
+### Chocolatey (Windows)
+
+```powershell
+choco install kunobi
+```
+
+The package is maintained at [kunobi-ninja/chocolatey-kunobi](https://github.com/kunobi-ninja/chocolatey-kunobi).
+
+### Winget (Windows)
+
+```powershell
+winget install kunobi-ninja.kunobi
+```
+
+The package is maintained at [microsoft/winget-pkgs](https://github.com/microsoft/winget-pkgs). Manifest PRs are submitted automatically from the [kunobi-ninja/winget-pkgs](https://github.com/kunobi-ninja/winget-pkgs) fork.
+
+### APT (Linux)
+
+Kunobi publishes `.deb` packages to a self-hosted APT repository. Two channels are available:
+
+| Channel | Description | Who should use it |
+|---------|-------------|-------------------|
+| `stable` | Production releases | Most users |
+| `unstable` | Pre-releases (RC, Beta, Alpha) | Testers and early adopters |
+
+Stable releases are automatically promoted to the unstable channel, so unstable users always receive stable updates too.
+
+#### Setup
+
+```bash
+# Import the GPG signing key
+curl -fsSL https://r2.kunobi.ninja/apt/gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/kunobi.gpg
+
+# Add the repository (choose one)
+
+# Stable channel (recommended)
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/kunobi.gpg] https://r2.kunobi.ninja/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/kunobi.list
+
+# OR Unstable channel (pre-releases)
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/kunobi.gpg] https://r2.kunobi.ninja/apt unstable main" \
+  | sudo tee /etc/apt/sources.list.d/kunobi.list
+```
+
+#### Install and update
+
+```bash
+sudo apt update
+sudo apt install kunobi
+```
+
+Future updates are delivered through the standard `apt upgrade` flow.
+
+### Aqua (macOS and Linux)
+
+[aqua](https://aquaproj.github.io/) can install Kunobi (macOS arm64, Linux x64) from the [aqua-registry](https://github.com/aquaproj/aqua-registry):
+
+```bash
+aqua init                       # if not already initialized
+aqua g -i kunobi-ninja/kunobi
 aqua i
 ```
 
-### Using mise
-
-As Kunobi is registered in the [aqua-registry](https://github.com/aquaproj/aqua-registry), it can also be used directly by mise.
+[mise](https://mise.jdx.dev/) can also install and manage Kunobi versions (macOS arm64, Linux x64) through aqua-registry:
 
 ```bash
-mise use aqua:kunobi-ninja/kunobi-releases
+mise use aqua:kunobi-ninja/kunobi
 ```
 
-### Manual download
+Kunobi is registered in the [aqua](https://aquaproj.github.io/) registry (`aqua:kunobi-ninja/kunobi`), so it can be used directly by mise.
 
-Download the release assets JSON and verify checksums manually:
+## Community
 
-```bash
-# Download the release assets JSON and its checksum
-VERSION="0.1.0"
-curl -fSL "https://r2.kunobi.ninja/v${VERSION}/Kunobi_${VERSION}_release_assets.json" -o release_assets.json
-curl -fSL "https://r2.kunobi.ninja/v${VERSION}/Kunobi_${VERSION}_release_assets.json.sha256" -o release_assets.json.sha256
+- [Discussions](https://github.com/kunobi-ninja/kunobi/discussions) for questions, ideas, and feedback
+- [Issues](https://github.com/kunobi-ninja/kunobi/issues) for bug reports
+- [Twitter / X](https://x.com/_kunobi_)
+- [Reddit](https://www.reddit.com/r/kunobi/)
 
-# Verify the JSON integrity
-sha256sum -c release_assets.json.sha256
+## License
 
-# List available platforms
-jq -r '.platforms | keys[]' release_assets.json
-
-# Download a specific artifact (e.g. darwin-aarch64)
-URL=$(jq -r '.platforms["darwin-aarch64"][0].url' release_assets.json)
-curl -fSL "$URL" -o kunobi.app.tar.gz
-
-# Verify artifact checksum
-EXPECTED=$(jq -r '.platforms["darwin-aarch64"][0].sha256' release_assets.json)
-echo "$EXPECTED  kunobi.app.tar.gz" | sha256sum -c -
-```
-
-## How it works
-
-1. **Upstream trigger** - When a new Kunobi version is published, a `repository_dispatch` event triggers the `update-release` workflow.
-2. **Validation** - The release assets JSON is validated (structure, SHA256 checksum, R2 URL accessibility).
-3. **Pull request** - A PR is created automatically for review.
-4. **Release** - On merge to `main`, a GitHub release is created with the versioned files.
-
-## Repository structure
-
-The repo maintains two files that are overwritten on each update:
-
-- `release_assets.json` - Current release metadata listing all platform artifacts with SHA256 checksums
-- `release_assets.json.sha256` - SHA256 checksum of the JSON file itself
-
-## Release structure
-
-Each GitHub release (tagged `{version}`) contains versioned copies of the assets files:
-
-- `Kunobi_{version}_release_assets.json` - Platform artifacts and checksums for the release
-- `Kunobi_{version}_release_assets.json.sha256` - SHA256 checksum of the JSON file
-
-The JSON file lists all downloadable artifacts grouped by platform, with their SHA256 checksums and R2 CDN URLs:
-
-```json
-{
-  "version": "0.1.0",
-  "channel": "stable",
-  "pub_date": "2025-01-01T00:00:00Z",
-  "platforms": {
-    "darwin-aarch64": [
-      { "sha256": "abc123...", "url": "https://r2.kunobi.ninja/v0.1.0/Kunobi_0.1.0_darwin-aarch64.app.tar.gz" }
-    ],
-    "darwin-x86_64": [
-      { "sha256": "def456...", "url": "https://r2.kunobi.ninja/v0.1.0/Kunobi_0.1.0_darwin-x86_64.app.tar.gz" }
-    ]
-  }
-}
-```
-
-## Workflows
-
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| `update-release` | `repository_dispatch` / manual | Downloads assets from R2, creates validation PR |
-| `validate-release` | PR / called by update | Validates JSON, checksum, and URL accessibility |
-| `create-release` | Push to `main` | Creates tagged GitHub release with versioned files |
+Source-available. See [LICENSE](LICENSE) for details.

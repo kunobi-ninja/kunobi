@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'release_assets.json'
-      - 'release_assets.json.sha256'
+      - 'releases/assets.json'
+      - 'releases/assets.json.sha256'
 
 jobs:
   create-release:
@@ -18,8 +18,8 @@ jobs:
       - name: Extract version and channel
         id: info
         run: |
-          VERSION=$(jq -r '.version' release_assets.json)
-          CHANNEL=$(jq -r '.channel' release_assets.json)
+          VERSION=$(jq -r '.version' releases/assets.json)
+          CHANNEL=$(jq -r '.channel' releases/assets.json)
 
           if [ -z "$VERSION" ] || [ -z "$CHANNEL" ]; then
             echo "Error: ❌ version and channel are required" >&2
@@ -34,8 +34,8 @@ jobs:
         env:
           VERSION: ${{ steps.info.outputs.version }}
         run: |
-          cp release_assets.json "Kunobi_${VERSION}_release_assets.json"
-          cp release_assets.json.sha256 "Kunobi_${VERSION}_release_assets.json.sha256"
+          cp releases/assets.json "Kunobi_${VERSION}_release_assets.json"
+          cp releases/assets.json.sha256 "Kunobi_${VERSION}_release_assets.json.sha256"
 
       - name: Create or update release
         env:
