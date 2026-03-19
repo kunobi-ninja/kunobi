@@ -1,40 +1,40 @@
 {
-  "version": "0.1.0-beta.25",
+  "version": "0.1.0-beta.26",
   "channel": "unstable",
-  "pub_date": "2026-03-11T14:11:39Z",
+  "pub_date": "2026-03-19T17:46:17Z",
   "platforms": {
     "darwin-aarch64": [
       {
-        "sha256": "6fb99d6d3ddc47a53b169aac4ab3314ef90ba09e6c88dfde541a2c24481b0594",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_darwin_aarch64.app.tar.gz"
+        "sha256": "1e672f1c12eb025728a18b75a833ee697b77f5efb2b112037afeedf333671374",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_darwin_aarch64.app.tar.gz"
       },
       {
-        "sha256": "a0f2f87497eaa54a7f985abddf150f8d8d5643891529952b8a67c20f194ac52a",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_darwin_aarch64.dmg"
+        "sha256": "cd03a46a2a9785cc59f074503ab27481469bf5d9a70affda9bb497b75af9d8cd",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_darwin_aarch64.dmg"
       }
     ],
     "linux-x86_64": [
       {
-        "sha256": "9e12ec37935507b0c4022577d35dd52da4a78ef730cd9f7a3dfd66afe591ff6b",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_linux_x86_64.AppImage"
+        "sha256": "2fa9d5b291ff0be04ca6be9e2892b5c61e07f82192f35eab6205f0f517313fcf",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_linux_x86_64.AppImage"
       },
       {
-        "sha256": "eb341f93fed00a14cedcf61822676ebb49ce3f54a5bd5188e6a8e1ed4cbff902",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_linux_x86_64.deb"
+        "sha256": "a1c66b404a104853bcd232d0b7b2810fb3ee0be8462ec83feebaa6314cd3462d",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_linux_x86_64.deb"
       },
       {
-        "sha256": "93d72d7a2cecd7283065ac4c64f6bd4bcc6decff4c0e26249cc2abe2fcc8d353",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_linux_x86_64.rpm"
+        "sha256": "5046219bc7dfec339612a2978b0bfb4c3f655575a5a2ff4c43bcc1a7e0f18be6",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_linux_x86_64.rpm"
       },
       {
-        "sha256": "f6f7dfb1adbf04b13575103313c1bbcd7769ac6ee0b205519cbf7679fc5f8c1e",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_linux_x86_64.tar.gz"
+        "sha256": "0453c032bf8c3c370276cfdc8953faa73c05d28cc6527b4548fd8a64db8c20c5",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_linux_x86_64.tar.gz"
       }
     ],
     "windows-x86_64": [
       {
-        "sha256": "69f69d57b2f42fb85dd82fb4f705fb44ad5c7f1acc371584d5d009d792f59033",
-        "url": "https://r2.kunobi.ninja/v0.1.0-beta.25/Kunobi_0.1.0-beta.25_windows_x86_64.exe"
+        "sha256": "32e6c16feb4dca175b9744314cacf87897f79e1714e26424d6d1650bc9f6c77c",
+        "url": "https://r2.kunobi.ninja/v0.1.0-beta.26/Kunobi_0.1.0-beta.26_windows_x86_64.exe"
       }
     ]
   }
