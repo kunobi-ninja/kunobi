@@ -59,19 +59,30 @@ jobs:
       - name: Download release assets from R2
         env:
           VERSION: ${{ steps.params.outputs.version }}
+          CHANNEL: ${{ steps.params.outputs.channel }}
         run: |
           BASE_URL="https://r2.kunobi.ninja/v${VERSION}"
           VERSIONED_FILE="Kunobi_${VERSION}_release_assets.json"
 
+          # Legacy path — latest-of-any-channel pointer.
+          # Kept for backward compatibility with consumers that read this exact path.
           curl -fSL "${BASE_URL}/${VERSIONED_FILE}" -o releases/assets.json
           curl -fSL "${BASE_URL}/${VERSIONED_FILE}.sha256" -o releases/assets.json.sha256
 
+          # Per-channel paths — let consumers track stable and unstable independently.
+          mkdir -p "releases/${CHANNEL}"
+          cp releases/assets.json        "releases/${CHANNEL}/assets.json"
+          cp releases/assets.json.sha256 "releases/${CHANNEL}/assets.json.sha256"
+
           ls -lh releases/assets.json releases/assets.json.sha256
+          ls -lh "releases/${CHANNEL}/assets.json" "releases/${CHANNEL}/assets.json.sha256"
 
       - name: Check for changes
         id: diff
+        env:
+          CHANNEL: ${{ steps.params.outputs.channel }}
         run: |
-          if git diff --quiet releases/assets.json 2>/dev/null; then
+          if git diff --quiet releases/assets.json "releases/${CHANNEL}/assets.json" 2>/dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "ℹ️ Release assets already up to date, skipping"
           else
@@ -84,13 +95,15 @@ jobs:
         id: branch
         env:
           VERSION: ${{ steps.params.outputs.version }}
+          CHANNEL: ${{ steps.params.outputs.channel }}
         run: |
           BRANCH="bot/update-${VERSION}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add releases/assets.json releases/assets.json.sha256
-          git commit -m "[Bot] Update Kunobi to ${VERSION}"
+          git add releases/assets.json releases/assets.json.sha256 \
+                  "releases/${CHANNEL}/assets.json" "releases/${CHANNEL}/assets.json.sha256"
+          git commit -m "[Bot] Update Kunobi to ${VERSION} (${CHANNEL})"
           git push origin "$BRANCH" || git push --force origin "$BRANCH"
           echo "name=$BRANCH" >> $GITHUB_OUTPUT
           echo "✅ New branch ${BRANCH} created"
