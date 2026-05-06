@@ -34,41 +34,64 @@ The whole thing runs natively on your OS. No bundled Chromium, no Electron, no N
 
 Download from [kunobi.ninja/download](https://kunobi.ninja/download). Available for macOS, Linux, and Windows.
 
+Two channels are available across all package managers:
+
+| Channel | Description | Who should use it |
+|---------|-------------|-------------------|
+| `stable` | Production releases | Most users |
+| `unstable` | Pre-releases (RC, beta, alpha) | Testers and early adopters |
+
+Stable and unstable install the same Kunobi binary; only one channel can be installed at a time. Switching channels means uninstalling and reinstalling. The mechanism for selecting a channel differs per package manager — see each section below.
+
 ### Homebrew (macOS)
 
 ```bash
 brew tap kunobi-ninja/kunobi  # If not already added
+
+# Stable
 brew install --cask kunobi
+
+# Unstable (pre-releases)
+brew install --cask kunobi-unstable
 ```
 
-The cask is maintained at [kunobi-ninja/homebrew-kunobi](https://github.com/kunobi-ninja/homebrew-kunobi).
+`brew` will refuse to install one cask while the other is present. To switch channels:
+
+```bash
+brew uninstall --cask kunobi && brew install --cask kunobi-unstable
+```
+
+The casks are maintained at [kunobi-ninja/homebrew-kunobi](https://github.com/kunobi-ninja/homebrew-kunobi).
 
 ### Chocolatey (Windows)
 
 ```powershell
+# Stable
 choco install kunobi
+
+# Unstable (pre-releases)
+choco install kunobi --pre
 ```
+
+Stable and unstable share a single Chocolatey package; the `--pre` flag opts into pre-release versions. Use `choco upgrade kunobi --pre` to keep an unstable install up to date.
 
 The package is maintained at [kunobi-ninja/chocolatey-kunobi](https://github.com/kunobi-ninja/chocolatey-kunobi).
 
 ### Winget (Windows)
 
 ```powershell
+# Stable
 winget install kunobi-ninja.kunobi
+
+# Unstable (pre-releases)
+winget install kunobi-ninja.kunobi.Unstable
 ```
 
-The package is maintained at [microsoft/winget-pkgs](https://github.com/microsoft/winget-pkgs). Manifest PRs are submitted automatically from the [kunobi-ninja/winget-pkgs](https://github.com/kunobi-ninja/winget-pkgs) fork.
+The packages are maintained at [microsoft/winget-pkgs](https://github.com/microsoft/winget-pkgs). Manifest PRs are submitted automatically from the [kunobi-ninja/winget-pkgs](https://github.com/kunobi-ninja/winget-pkgs) fork.
 
 ### APT (Linux)
 
-Kunobi publishes `.deb` packages to a self-hosted APT repository. Two channels are available:
-
-| Channel | Description | Who should use it |
-|---------|-------------|-------------------|
-| `stable` | Production releases | Most users |
-| `unstable` | Pre-releases (RC, Beta, Alpha) | Testers and early adopters |
-
-Stable releases are automatically promoted to the unstable channel, so unstable users always receive stable updates too.
+Kunobi publishes `.deb` packages to a self-hosted APT repository with **one signed suite per channel**. The channel is selected by **which suite your `/etc/apt/sources.list.d/kunobi.list` subscribes to** — there's no separate package name. Stable releases are also promoted into the unstable suite, so unstable subscribers receive stable updates too.
 
 #### Setup
 
