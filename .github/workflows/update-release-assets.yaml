@@ -9,13 +9,13 @@ on:
         description: 'Version to update to (without v prefix)'
         required: true
       channel:
-        description: 'Release channel (stable, unstable)'
-        required: true
+        description: 'Release channel (defaults to stable if omitted; pre-release versions require explicit unstable)'
+        required: false
         type: choice
         options:
           - stable
           - unstable
-        default: unstable
+        default: stable
 
 jobs:
   update-release-assets:
@@ -41,15 +41,33 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "repository_dispatch" ]; then
             VERSION="$DISPATCH_VERSION"
-            CHANNEL="$DISPATCH_CHANNEL"
+            CHANNEL_RAW="$DISPATCH_CHANNEL"
           else
             VERSION="$INPUT_VERSION"
-            CHANNEL="$INPUT_CHANNEL"
+            CHANNEL_RAW="$INPUT_CHANNEL"
           fi
 
-          if [ -z "$VERSION" ] || [ -z "$CHANNEL" ]; then
-            echo "Error: ❌ version and channel are required" >&2
+          if [ -z "$VERSION" ]; then
+            echo "Error: ❌ version is required" >&2
             exit 1
+          fi
+
+          # Backward compatibility: callers that don't send `channel` are
+          # treated as stable. To prevent a pre-release version from silently
+          # landing on the stable channel, the version must match the stable
+          # SemVer pattern (^x.y.z$) when channel is defaulted.
+          if [ -z "$CHANNEL_RAW" ]; then
+            if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              CHANNEL="stable"
+              echo "ℹ️ channel not provided — defaulted to 'stable' (version matches stable pattern)"
+            else
+              echo "Error: channel not provided and version '$VERSION' does not match the stable" >&2
+              echo "       pattern (^[0-9]+\\.[0-9]+\\.[0-9]+\$). Refusing to default to stable for" >&2
+              echo "       a pre-release version. Please pass channel explicitly." >&2
+              exit 1
+            fi
+          else
+            CHANNEL="$CHANNEL_RAW"
           fi
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
