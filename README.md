@@ -41,7 +41,7 @@ Two channels are available across all package managers:
 | `stable` | Production releases | Most users |
 | `unstable` | Pre-releases (RC, beta, alpha) | Testers and early adopters |
 
-Stable and unstable share the same `Kunobi.app` bundle and bundle identifier (`ninja.kunobi.desktop`); they cannot coexist on the same machine. Pick a channel; switching means uninstalling and reinstalling.
+Stable and unstable install the same Kunobi binary; only one channel can be installed at a time. Switching channels means uninstalling and reinstalling. The mechanism for selecting a channel differs per package manager — see each section below.
 
 ### Homebrew (macOS)
 
@@ -91,7 +91,7 @@ The packages are maintained at [microsoft/winget-pkgs](https://github.com/micros
 
 ### APT (Linux)
 
-Kunobi publishes `.deb` packages to a self-hosted APT repository with one suite per channel. Stable releases are also promoted into the unstable suite, so unstable subscribers receive stable updates too.
+Kunobi publishes `.deb` packages to a self-hosted APT repository with **one signed suite per channel**. The channel is selected by **which suite your `/etc/apt/sources.list.d/kunobi.list` subscribes to** — there's no separate package name. Stable releases are also promoted into the unstable suite, so unstable subscribers receive stable updates too.
 
 #### Setup
 
