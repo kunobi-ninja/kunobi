@@ -70,6 +70,16 @@ jobs:
             CHANNEL="$CHANNEL_RAW"
           fi
 
+          # Channel goes into a filesystem path below — reject anything that
+          # isn't a known value to prevent path traversal or stray directories.
+          case "$CHANNEL" in
+            stable|unstable) ;;
+            *)
+              echo "Error: unknown channel '$CHANNEL' (expected 'stable' or 'unstable')" >&2
+              exit 1
+              ;;
+          esac
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "channel=$CHANNEL" >> $GITHUB_OUTPUT
           echo "✅ Updating to version: $VERSION (channel: $CHANNEL)"
