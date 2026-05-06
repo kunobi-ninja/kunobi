@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "channel": "stable",
+  "pub_date": "2026-05-05T18:09:44Z",
+  "platforms": {
+    "darwin-aarch64": [
+      {
+        "sha256": "083bf05df5afc1d2dd7bd2838548c7745895bb5158d404512d403a8218953e62",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_darwin_aarch64.app.tar.gz"
+      },
+      {
+        "sha256": "a6b6dc23ed6fa608b4b565643c14f045ec9f26b0fd35b23b94a7abf5d216bf77",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_darwin_aarch64.dmg"
+      }
+    ],
+    "linux-x86_64": [
+      {
+        "sha256": "7e8092c968658ba2fbc1caf9a05eb8b65835daa2319af235bb11014db15327cb",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_linux_x86_64.AppImage"
+      },
+      {
+        "sha256": "20f8c869e5b5e297255dde733af1848f948193af27c6fa8a065cf991af29809e",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_linux_x86_64.deb"
+      },
+      {
+        "sha256": "9a36a4e9251ab9961e59313b0d572e55519b28f384ee83266d6198ef4569ce4b",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_linux_x86_64.rpm"
+      },
+      {
+        "sha256": "a841b37e1b0998c3eed460b316067be4dfc9f0a920d77bf7b0723963096d035f",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_linux_x86_64.tar.gz"
+      }
+    ],
+    "windows-x86_64": [
+      {
+        "sha256": "32cafa08a44e3d16c7beaefb7b7baec958450d8ebc5c828ac4c0aacbb9dce9c2",
+        "url": "https://r2.kunobi.ninja/v1.0.0/Kunobi_1.0.0_windows_x86_64.exe"
+      }
+    ]
+  }
+}

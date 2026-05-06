@@ -9,13 +9,13 @@ on:
         description: 'Version to update to (without v prefix)'
         required: true
       channel:
-        description: 'Release channel (stable, unstable)'
-        required: true
+        description: 'Release channel (defaults to stable if omitted; pre-release versions require explicit unstable)'
+        required: false
         type: choice
         options:
           - stable
           - unstable
-        default: unstable
+        default: stable
 
 jobs:
   update-release-assets:
@@ -41,16 +41,44 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "repository_dispatch" ]; then
             VERSION="$DISPATCH_VERSION"
-            CHANNEL="$DISPATCH_CHANNEL"
+            CHANNEL_RAW="$DISPATCH_CHANNEL"
           else
             VERSION="$INPUT_VERSION"
-            CHANNEL="$INPUT_CHANNEL"
+            CHANNEL_RAW="$INPUT_CHANNEL"
           fi
 
-          if [ -z "$VERSION" ] || [ -z "$CHANNEL" ]; then
-            echo "Error: ❌ version and channel are required" >&2
+          if [ -z "$VERSION" ]; then
+            echo "Error: ❌ version is required" >&2
             exit 1
           fi
+
+          # Backward compatibility: callers that don't send `channel` are
+          # treated as stable. To prevent a pre-release version from silently
+          # landing on the stable channel, the version must match the stable
+          # SemVer pattern (^x.y.z$) when channel is defaulted.
+          if [ -z "$CHANNEL_RAW" ]; then
+            if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              CHANNEL="stable"
+              echo "ℹ️ channel not provided — defaulted to 'stable' (version matches stable pattern)"
+            else
+              echo "Error: channel not provided and version '$VERSION' does not match the stable" >&2
+              echo "       pattern (^[0-9]+\\.[0-9]+\\.[0-9]+\$). Refusing to default to stable for" >&2
+              echo "       a pre-release version. Please pass channel explicitly." >&2
+              exit 1
+            fi
+          else
+            CHANNEL="$CHANNEL_RAW"
+          fi
+
+          # Channel goes into a filesystem path below — reject anything that
+          # isn't a known value to prevent path traversal or stray directories.
+          case "$CHANNEL" in
+            stable|unstable) ;;
+            *)
+              echo "Error: unknown channel '$CHANNEL' (expected 'stable' or 'unstable')" >&2
+              exit 1
+              ;;
+          esac
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "channel=$CHANNEL" >> $GITHUB_OUTPUT
@@ -59,19 +87,31 @@ jobs:
       - name: Download release assets from R2
         env:
           VERSION: ${{ steps.params.outputs.version }}
+          CHANNEL: ${{ steps.params.outputs.channel }}
         run: |
           BASE_URL="https://r2.kunobi.ninja/v${VERSION}"
           VERSIONED_FILE="Kunobi_${VERSION}_release_assets.json"
 
+          # Legacy path — latest-of-any-channel pointer.
+          # Kept for backward compatibility with consumers that read this exact path.
           curl -fSL "${BASE_URL}/${VERSIONED_FILE}" -o releases/assets.json
           curl -fSL "${BASE_URL}/${VERSIONED_FILE}.sha256" -o releases/assets.json.sha256
 
+          # Per-channel paths — let consumers track stable and unstable independently.
+          mkdir -p "releases/${CHANNEL}"
+          cp releases/assets.json        "releases/${CHANNEL}/assets.json"
+          cp releases/assets.json.sha256 "releases/${CHANNEL}/assets.json.sha256"
+
           ls -lh releases/assets.json releases/assets.json.sha256
+          ls -lh "releases/${CHANNEL}/assets.json" "releases/${CHANNEL}/assets.json.sha256"
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet releases/assets.json 2>/dev/null; then
+          # Use git status (not git diff) so newly created untracked files
+          # under releases/ are also counted as changes — e.g. the first time
+          # `releases/${CHANNEL}/` is materialized for a channel.
+          if [ -z "$(git status --porcelain releases/)" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "ℹ️ Release assets already up to date, skipping"
           else
@@ -84,13 +124,15 @@ jobs:
         id: branch
         env:
           VERSION: ${{ steps.params.outputs.version }}
+          CHANNEL: ${{ steps.params.outputs.channel }}
         run: |
           BRANCH="bot/update-${VERSION}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add releases/assets.json releases/assets.json.sha256
-          git commit -m "[Bot] Update Kunobi to ${VERSION}"
+          git add releases/assets.json releases/assets.json.sha256 \
+                  "releases/${CHANNEL}/assets.json" "releases/${CHANNEL}/assets.json.sha256"
+          git commit -m "[Bot] Update Kunobi to ${VERSION} (${CHANNEL})"
           git push origin "$BRANCH" || git push --force origin "$BRANCH"
           echo "name=$BRANCH" >> $GITHUB_OUTPUT
           echo "✅ New branch ${BRANCH} created"
