@@ -107,10 +107,11 @@ jobs:
 
       - name: Check for changes
         id: diff
-        env:
-          CHANNEL: ${{ steps.params.outputs.channel }}
         run: |
-          if git diff --quiet releases/assets.json "releases/${CHANNEL}/assets.json" 2>/dev/null; then
+          # Use git status (not git diff) so newly created untracked files
+          # under releases/ are also counted as changes — e.g. the first time
+          # `releases/${CHANNEL}/` is materialized for a channel.
+          if [ -z "$(git status --porcelain releases/)" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "ℹ️ Release assets already up to date, skipping"
           else
