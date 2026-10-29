@@ -1,40 +1,40 @@
 {
-  "version": "2.0.0-rc.8",
+  "version": "2.0.0-rc.9",
   "channel": "unstable",
-  "pub_date": "2026-10-27T17:44:03Z",
+  "pub_date": "2026-10-28T23:33:23Z",
   "platforms": {
     "darwin-aarch64": [
       {
-        "sha256": "103eac7dbbcc8d85189e53956748ed01ff394bc4680c43fd2b23ba796faf8975",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_darwin_aarch64.app.tar.gz"
+        "sha256": "5aeb48ddad43cb728e9e16f71eb6b23419716e4832e6b6afd6a45b879c499390",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_darwin_aarch64.app.tar.gz"
       },
       {
-        "sha256": "ddf7f6da0058593bd6de133a1706a8ec955697dcb62ac53c4b61e8f3c974ab71",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_darwin_aarch64.dmg"
+        "sha256": "2c38e3a1be647c1bcf6aef79bd34a864917198e93122370e4568a3530c4af50a",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_darwin_aarch64.dmg"
       }
     ],
     "linux-x86_64": [
       {
-        "sha256": "e3044104ac8015c1b5c5e2651bb78afdf0c061383173617cabc94d1604d44d7c",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_linux_x86_64.AppImage"
+        "sha256": "8098ba67015304712f24d48e54ee4c741cc1020e79f30a5e5506b4ef842cbe18",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_linux_x86_64.AppImage"
       },
       {
-        "sha256": "2b7974d1076ba3a103bc5b72681f81168f5313b421d3632ed90b9c19014ec77e",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_linux_x86_64.deb"
+        "sha256": "a26007587d0c4e1d32076415eab4f4247e95b1b3f950a44cf8ffb13e1d14eb1a",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_linux_x86_64.deb"
       },
       {
-        "sha256": "0c979cdb95f98e330ff6cb9fd21c4dde29d0d55222e4b9fee019672d28b0f828",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_linux_x86_64.rpm"
+        "sha256": "f5a1a355495187fa958cb9fc6cd679514ee89b9d5f17167bd8aa057c998b96fc",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_linux_x86_64.rpm"
       },
       {
-        "sha256": "dc8a9a33824f24c127b682e8d4758840712f83c9d196a22859127c382a6615cb",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_linux_x86_64.tar.gz"
+        "sha256": "46dd556466771d50dad7f2d7c30fa29fdd1813588b0c350c89517908c7a03228",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_linux_x86_64.tar.gz"
       }
     ],
     "windows-x86_64": [
       {
-        "sha256": "d9cc16e7bd8f8e54d2348b03e81121bc589ef21d41e31101b1efed4007c14782",
-        "url": "https://r2.kunobi.com/v2.0.0-rc.8/Kunobi_2.0.0-rc.8_windows_x86_64.exe"
+        "sha256": "c26831ff3fa2578f8b37182649bc9de8d3c5fd2a74103dae75da90cede60047b",
+        "url": "https://r2.kunobi.com/v2.0.0-rc.9/Kunobi_2.0.0-rc.9_windows_x86_64.exe"
       }
     ]
   }
